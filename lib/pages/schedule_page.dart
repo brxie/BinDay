@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../data/events.dart';
 import 'city_selection_page.dart';
+import '../utils/date_utils.dart';
 
 class SchedulePage extends StatefulWidget {
   final List<String> selectedCities;
@@ -247,7 +248,7 @@ class SchedulePageState extends State<SchedulePage> {
                       ),
                 ),
                 subtitle: Text(
-                  event['date'] ?? '',
+                  '${event['date'] ?? ''} - ${getDayOfWeek(DateTime.parse(event['date'] ?? ''))}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[600],
                       ),
