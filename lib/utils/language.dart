@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-
 class LangPL {
   static const String appName = 'Wystaw Śmieci!';
   static const String selectCity = 'Wybierz miejscowość';
   static const String upcomingEvents = 'Najbliższy odbiór odpadów';
   static const String backToCitySelection = 'Wybór miejscowości';
-  static const String getNotifications = 'Otrzymuj powiadomienia';
+  static const String getNotifications = 'Powiadom';
   // Add Polish translations for weekdays
   static const String monday = 'Poniedziałek';
   static const String tuesday = 'Wtorek';

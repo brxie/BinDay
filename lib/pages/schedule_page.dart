@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
 import 'package:wystaw_smieci/utils/language.dart';
 import '../data/events.dart';
 import 'city_selection_page.dart';
 import '../utils/date_utils.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'dart:async';
 
 class SchedulePage extends StatefulWidget {
   final List<String> selectedCities;
@@ -19,6 +23,89 @@ class SchedulePageState extends State<SchedulePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   bool _notificationsEnabled = true;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotificationPreference();
+    _initializeNotifications();
+    _scheduleDailyNotifications();
+  }
+
+  Future<void> _loadNotificationPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _notificationsEnabled = prefs.getBool('notificationsEnabled') ?? true;
+    });
+  }
+
+  Future<void> _saveNotificationPreference(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('notificationsEnabled', value);
+  }
+
+  void _initializeNotifications() {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+      linux: LinuxInitializationSettings(
+        defaultActionName: 'Open',
+      ),
+    );
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    tz.initializeTimeZones();
+  }
+
+  void _scheduleDailyNotifications() {
+    if (_notificationsEnabled) {
+      _scheduleNotificationForTomorrow();
+    }
+  }
+
+  void _scheduleNotificationForTomorrow() {
+    final now = DateTime.now();
+    final tomorrow =
+        DateTime(now.year, now.month, now.day + 1, 16); // 4 PM tomorrow
+    // final durationUntilTomorrow = tomorrow.difference(now);
+
+    for (int i = 0; i < 10; i++) {
+      Timer(Duration(seconds: i), () async {
+        final eventsTomorrow = widget.selectedCities
+            .expand((city) => getEventsForCity(city))
+            .where((event) {
+          final eventDate = DateTime.parse(event['date']!);
+          return eventDate.year == tomorrow.year &&
+              eventDate.month == tomorrow.month &&
+              eventDate.day == tomorrow.day;
+        }).toList();
+
+        if (eventsTomorrow.isNotEmpty) {
+          final eventNames =
+              eventsTomorrow.map((event) => event['name']).join(', ');
+          await flutterLocalNotificationsPlugin.show(
+            0,
+            'Events for Tomorrow no $i',
+            eventNames,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                Constants.androidNotificationID,
+                Constants.androidNotificationName,
+                channelDescription:
+                    Constants.androidNotificationChannelDescription,
+              ),
+              linux: LinuxNotificationDetails(),
+            ),
+          );
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +155,93 @@ class SchedulePageState extends State<SchedulePage> {
         backgroundColor: Colors.green[200],
         tooltip: LangPL.backToCitySelection,
         child: const Icon(Icons.home),
+      ),
+    );
+  }
+
+  Widget _buildEventHeaderList(BuildContext context, String city) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            decoration: BoxDecoration(
+              color: Colors.green[100],
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.location_city, color: Colors.green[700]),
+                const SizedBox(width: 12),
+                Text(
+                  city,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.green[900],
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const Spacer(),
+                Text(
+                  LangPL.getNotifications,
+                  style: TextStyle(
+                    color: Colors.green[700],
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Switch(
+                  value: _notificationsEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      _notificationsEnabled = value;
+                      _saveNotificationPreference(value);
+                    });
+                  },
+                  activeColor: Colors.green[700],
+                  inactiveThumbColor: Colors.grey,
+                  inactiveTrackColor: Colors.grey[300],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            LangPL.upcomingEvents,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Colors.green[900],
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 8),
+          ...getNearestEventsForCity(city).map((event) {
+            return Card(
+              elevation: 2,
+              margin: const EdgeInsets.symmetric(vertical: 4.0),
+              child: ListTile(
+                leading: Icon(
+                  event['name']?.contains('Recycling') ?? false
+                      ? Icons.recycling
+                      : Icons.delete,
+                  color: Colors.green[700],
+                ),
+                title: Text(
+                  event['name'] ?? '',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                subtitle: Text(
+                  '${event['date'] ?? ''} - ${getDayOfWeek(DateTime.parse(event['date'] ?? ''))}',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                ),
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -156,7 +330,7 @@ class SchedulePageState extends State<SchedulePage> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.green.withOpacity(0.5),
+              color: Colors.green.withAlpha((0.5 * 255).toInt()),
               blurRadius: 6,
               spreadRadius: 2,
             ),
@@ -202,92 +376,6 @@ class SchedulePageState extends State<SchedulePage> {
           color: Colors.green[300],
           fontWeight: FontWeight.bold,
         ),
-      ),
-    );
-  }
-
-  Widget _buildEventHeaderList(BuildContext context, String city) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: Colors.green[100],
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.location_city, color: Colors.green[700]),
-                const SizedBox(width: 12),
-                Text(
-                  city,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.green[900],
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const Spacer(),
-                Text(
-                  LangPL.getNotifications,
-                  style: TextStyle(
-                    color: Colors.green[700],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Switch(
-                  value: _notificationsEnabled,
-                  onChanged: (value) {
-                    setState(() {
-                      _notificationsEnabled = value;
-                    });
-                  },
-                  activeColor: Colors.green[700],
-                  inactiveThumbColor: Colors.grey,
-                  inactiveTrackColor: Colors.grey[300],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            LangPL.upcomingEvents,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.green[900],
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          const SizedBox(height: 8),
-          ...getNearestEventsForCity(city).map((event) {
-            return Card(
-              elevation: 2,
-              margin: const EdgeInsets.symmetric(vertical: 4.0),
-              child: ListTile(
-                leading: Icon(
-                  event['name']?.contains('Recycling') ?? false
-                      ? Icons.recycling
-                      : Icons.delete,
-                  color: Colors.green[700],
-                ),
-                title: Text(
-                  event['name'] ?? '',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                subtitle: Text(
-                  '${event['date'] ?? ''} - ${getDayOfWeek(DateTime.parse(event['date'] ?? ''))}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                ),
-              ),
-            );
-          }),
-        ],
       ),
     );
   }
