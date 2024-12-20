@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:wystaw_smieci/utils/constants.dart';
+import 'package:wystaw_smieci/utils/language.dart';
 import '../data/events.dart';
 import 'city_selection_page.dart';
 import '../utils/date_utils.dart';
@@ -21,16 +23,13 @@ class SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trash Collection App'),
+        title: const Text(LangPL.appName),
         backgroundColor: Colors.green[700],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              const Color.fromARGB(255, 239, 250, 244),
-              const Color.fromARGB(255, 228, 253, 240)
-            ],
+            colors: Constants.backgroundGradientColors,
             begin: Alignment.topCenter,
             end: Alignment.bottomRight,
           ),
@@ -65,8 +64,8 @@ class SchedulePageState extends State<SchedulePage> {
             (Route<dynamic> route) => false,
           );
         },
-        backgroundColor: Colors.green[700],
-        tooltip: 'Back to City Selection',
+        backgroundColor: Colors.green[200],
+        tooltip: LangPL.backToCitySelection,
         child: const Icon(Icons.home),
       ),
     );
@@ -82,8 +81,8 @@ class SchedulePageState extends State<SchedulePage> {
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.green.withOpacity(0.3),
-              blurRadius: 4,
+              color: Colors.green.withAlpha((0.1 * 255).toInt()),
+              blurRadius: 1,
               spreadRadius: 2,
             ),
           ],
@@ -145,7 +144,7 @@ class SchedulePageState extends State<SchedulePage> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withAlpha((0.3 * 255).toInt()),
               blurRadius: 4,
               spreadRadius: 2,
             ),
@@ -168,7 +167,7 @@ class SchedulePageState extends State<SchedulePage> {
           border: Border.all(color: Colors.white, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withAlpha((0.3 * 255).toInt()),
               blurRadius: 3,
               spreadRadius: 1,
             ),
@@ -235,7 +234,7 @@ class SchedulePageState extends State<SchedulePage> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Upcoming Events',
+            LangPL.upcomingEvents,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: Colors.green[900],
                   fontWeight: FontWeight.bold,

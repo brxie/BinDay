@@ -1,20 +1,22 @@
+import 'language.dart';
+
 String getDayOfWeek(DateTime date) {
   switch (date.weekday) {
     case DateTime.monday:
-      return 'Monday';
+      return LangPL.monday;
     case DateTime.tuesday:
-      return 'Tuesday';
+      return LangPL.tuesday;
     case DateTime.wednesday:
-      return 'Wednesday';
+      return LangPL.wednesday;
     case DateTime.thursday:
-      return 'Thursday';
+      return LangPL.thursday;
     case DateTime.friday:
-      return 'Friday';
+      return LangPL.friday;
     case DateTime.saturday:
-      return 'Saturday';
+      return LangPL.saturday;
     case DateTime.sunday:
-      return 'Sunday';
+      return LangPL.sunday;
     default:
       return '';
   }
-} 
+}

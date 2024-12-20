@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wystaw_smieci/utils/language.dart';
 import 'schedule_page.dart';
+import '../utils/constants.dart';
 
 bool isFirstBuild = true;
 
@@ -79,16 +81,13 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trash Collection App'),
+        title: const Text(LangPL.appName),
         backgroundColor: Colors.green[700],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              const Color.fromARGB(255, 239, 250, 244),
-              const Color.fromARGB(255, 228, 253, 240)
-            ],
+            colors: Constants.backgroundGradientColors,
             begin: Alignment.topCenter,
             end: Alignment.bottomRight,
           ),
@@ -99,7 +98,7 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Select City',
+                LangPL.selectCity,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.green[900],
                       fontWeight: FontWeight.bold,
