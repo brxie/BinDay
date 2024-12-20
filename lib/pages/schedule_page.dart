@@ -18,6 +18,7 @@ class SchedulePage extends StatefulWidget {
 class SchedulePageState extends State<SchedulePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  bool _notificationsEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -228,6 +229,25 @@ class SchedulePageState extends State<SchedulePage> {
                         color: Colors.green[900],
                         fontWeight: FontWeight.bold,
                       ),
+                ),
+                const Spacer(),
+                Text(
+                  LangPL.getNotifications,
+                  style: TextStyle(
+                    color: Colors.green[700],
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Switch(
+                  value: _notificationsEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      _notificationsEnabled = value;
+                    });
+                  },
+                  activeColor: Colors.green[700],
+                  inactiveThumbColor: Colors.grey,
+                  inactiveTrackColor: Colors.grey[300],
                 ),
               ],
             ),
