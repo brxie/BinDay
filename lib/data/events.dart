@@ -22,7 +22,7 @@ List<Map<String, String>> getEventsForCity(String city) {
 }
 
 List<Map<String, String>> getNearestEventsForCity(String city) {
-  final now = DateTime.now();
+  final now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   final events = getEventsForCity(city);
 
   // Find the nearest date

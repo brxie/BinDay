@@ -21,29 +21,41 @@ class SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trash Collection Schedules'),
+        title: const Text('Trash Collection App'),
         backgroundColor: Colors.green[700],
       ),
-      body: ListView(
-        children: widget.selectedCities.map((city) {
-          final eventsToday = getEventsForCity(city).where((event) {
-            final eventDate = DateTime.parse(event['date']!);
-            return eventDate.year == _selectedDay!.year &&
-                eventDate.month == _selectedDay!.month &&
-                eventDate.day == _selectedDay!.day;
-          });
-          return Column(
-            children: <Widget>[
-              // Event List
-              _buildEventHeaderList(context, city),
-              // Calendar
-              _buildCalendar(context, city),
-              // Fancy Text for Selected Date
-              if (_selectedDay != null && eventsToday.isNotEmpty)
-                _buildSelectedDateText(eventsToday),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color.fromARGB(255, 239, 250, 244),
+              const Color.fromARGB(255, 228, 253, 240)
             ],
-          );
-        }).toList(),
+            begin: Alignment.topCenter,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: ListView(
+          children: widget.selectedCities.map((city) {
+            final eventsToday = getEventsForCity(city).where((event) {
+              final eventDate = DateTime.parse(event['date']!);
+              return eventDate.year == _selectedDay!.year &&
+                  eventDate.month == _selectedDay!.month &&
+                  eventDate.day == _selectedDay!.day;
+            });
+            return Column(
+              children: <Widget>[
+                // Event List
+                _buildEventHeaderList(context, city),
+                // Calendar
+                _buildCalendar(context, city),
+                // Fancy Text for Selected Date
+                if (_selectedDay != null && eventsToday.isNotEmpty)
+                  _buildSelectedDateText(eventsToday),
+              ],
+            );
+          }).toList(),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

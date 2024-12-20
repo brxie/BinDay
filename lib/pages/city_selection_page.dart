@@ -6,7 +6,6 @@ bool isFirstBuild = true;
 
 class CitySelectionPage extends StatefulWidget {
   const CitySelectionPage({super.key});
-  
 
   @override
   State<CitySelectionPage> createState() => _CitySelectionPageState();
@@ -14,11 +13,32 @@ class CitySelectionPage extends StatefulWidget {
 
 class _CitySelectionPageState extends State<CitySelectionPage> {
   final List<String> _cities = [
-    'New York',
-    'Los Angeles',
-    'Chicago',
-    'Houston',
-    'Phoenix'
+    'Baranówka',
+    'Czulice',
+    'Dojazdów',
+    'Głęboka',
+    'Goszcza',
+    'Goszyce',
+    'Karniów',
+    'Kocmyrzów',
+    'Krzysztoforzyce',
+    'Łosokowice',
+    'Luborzyca',
+    'Łuczyce (część I Krakowska)',
+    'Łuczyce (część II Prądnik)',
+    'Maciejowice',
+    'Marszowice',
+    'Pietrzejowice',
+    'Prusy',
+    'Rawałowice',
+    'Sadowie',
+    'Skrzeszowice',
+    'Sulechów',
+    'Wiktorowice',
+    'Wilków',
+    'Wola Luborzycka',
+    'Wysiołek Luborzycki',
+    'Zastów'
   ];
   String? _selectedCity;
 
@@ -59,32 +79,81 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select City for Trash Collection'),
+        title: const Text('Trash Collection App'),
         backgroundColor: Colors.green[700],
       ),
-      body: ListView(
-        children: _cities.map((city) {
-          return RadioListTile<String>(
-            title: Text(city),
-            value: city,
-            groupValue: _selectedCity,
-            onChanged: (String? value) {
-              if (value != null) {
-                setState(() {
-                  _selectedCity = value;
-                });
-                _saveSelectedCity(value);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SchedulePage(selectedCities: [value]),
-                  ),
-                );
-              }
-            },
-            secondary: const Icon(Icons.delete, color: Colors.green),
-          );
-        }).toList(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color.fromARGB(255, 239, 250, 244),
+              const Color.fromARGB(255, 228, 253, 240)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Select City',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.green[900],
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemCount: _cities.length,
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.green[200],
+                  thickness: 1,
+                ),
+                itemBuilder: (context, index) {
+                  final city = _cities[index];
+                  return Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                    elevation: 6,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: ListTile(
+                      tileColor: Colors.green[50],
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16),
+                      title: Text(
+                        city,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.green[800],
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _selectedCity = city;
+                        });
+                        _saveSelectedCity(city);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SchedulePage(selectedCities: [city]),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
