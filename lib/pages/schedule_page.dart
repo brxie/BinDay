@@ -74,37 +74,35 @@ class SchedulePageState extends State<SchedulePage> {
         DateTime(now.year, now.month, now.day + 1, 16); // 4 PM tomorrow
     // final durationUntilTomorrow = tomorrow.difference(now);
 
-    for (int i = 0; i < 10; i++) {
-      Timer(Duration(seconds: i), () async {
-        final eventsTomorrow = widget.selectedCities
-            .expand((city) => getEventsForCity(city))
-            .where((event) {
-          final eventDate = DateTime.parse(event['date']!);
-          return eventDate.year == tomorrow.year &&
-              eventDate.month == tomorrow.month &&
-              eventDate.day == tomorrow.day;
-        }).toList();
+    Timer(Duration(seconds: 10), () async {
+      final eventsTomorrow = widget.selectedCities
+          .expand((city) => getEventsForCity(city))
+          .where((event) {
+        final eventDate = DateTime.parse(event['date']!);
+        return eventDate.year == tomorrow.year &&
+            eventDate.month == tomorrow.month &&
+            eventDate.day == tomorrow.day;
+      }).toList();
 
-        if (eventsTomorrow.isNotEmpty) {
-          final eventNames =
-              eventsTomorrow.map((event) => event['name']).join(', ');
-          await flutterLocalNotificationsPlugin.show(
-            0,
-            'Events for Tomorrow no $i',
-            eventNames,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                Constants.androidNotificationID,
-                Constants.androidNotificationName,
-                channelDescription:
-                    Constants.androidNotificationChannelDescription,
-              ),
-              linux: LinuxNotificationDetails(),
+      if (eventsTomorrow.isNotEmpty) {
+        final eventNames =
+            eventsTomorrow.map((event) => event['name']).join(', ');
+        await flutterLocalNotificationsPlugin.show(
+          0,
+          'Events for Tomorrow no',
+          eventNames,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              Constants.androidNotificationID,
+              Constants.androidNotificationName,
+              channelDescription:
+                  Constants.androidNotificationChannelDescription,
             ),
-          );
-        }
-      });
-    }
+            linux: LinuxNotificationDetails(),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -214,11 +212,11 @@ class SchedulePageState extends State<SchedulePage> {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 2),
           ...getNearestEventsForCity(city).map((event) {
             return Card(
-              elevation: 2,
-              margin: const EdgeInsets.symmetric(vertical: 4.0),
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 2.0),
               child: ListTile(
                 leading: Icon(
                   event['name']?.contains('Recycling') ?? false
@@ -228,7 +226,7 @@ class SchedulePageState extends State<SchedulePage> {
                 ),
                 title: Text(
                   event['name'] ?? '',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                 ),
@@ -286,6 +284,7 @@ class SchedulePageState extends State<SchedulePage> {
 
   Widget _buildCalendar(BuildContext context, String city) {
     return TableCalendar(
+      locale: Constants.locale,
       availableCalendarFormats: {
         CalendarFormat.month: 'Month',
       },
