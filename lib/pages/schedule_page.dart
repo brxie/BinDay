@@ -9,10 +9,10 @@ class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key, required this.selectedCities});
 
   @override
-  _SchedulePageState createState() => _SchedulePageState();
+  SchedulePageState createState() => SchedulePageState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class SchedulePageState extends State<SchedulePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
@@ -25,15 +25,21 @@ class _SchedulePageState extends State<SchedulePage> {
       ),
       body: ListView(
         children: widget.selectedCities.map((city) {
+          final eventsToday = getEventsForCity(city).where((event) {
+            final eventDate = DateTime.parse(event['date']!);
+            return eventDate.year == _selectedDay!.year &&
+                eventDate.month == _selectedDay!.month &&
+                eventDate.day == _selectedDay!.day;
+          });
           return Column(
             children: <Widget>[
               // Event List
-              _buildEventList(context, city),
+              _buildEventHeaderList(context, city),
               // Calendar
               _buildCalendar(context, city),
               // Fancy Text for Selected Date
-              if (_selectedDay != null && _selectedDay!.day.isEven)
-                _buildSelectedDateText(),
+              if (_selectedDay != null && eventsToday.isNotEmpty)
+                _buildSelectedDateText(eventsToday),
             ],
           );
         }).toList(),
@@ -53,7 +59,7 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  Widget _buildSelectedDateText() {
+  Widget _buildSelectedDateText(Iterable<Map<String, String>> eventsToday) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
@@ -77,9 +83,9 @@ class _SchedulePageState extends State<SchedulePage> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Selected Date: ${_selectedDay.toString()}',
+                eventsToday.map((event) => '• ${event['name']}').join('\n'),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.green[900],
                 ),
@@ -187,7 +193,7 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  Widget _buildEventList(BuildContext context, String city) {
+  Widget _buildEventHeaderList(BuildContext context, String city) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -223,7 +229,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 ),
           ),
           const SizedBox(height: 8),
-          ...getEventsForCity(city).map((event) {
+          ...getNearestEventsForCity(city).map((event) {
             return Card(
               elevation: 2,
               margin: const EdgeInsets.symmetric(vertical: 4.0),
