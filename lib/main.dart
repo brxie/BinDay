@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
 import 'pages/city_selection_page.dart';
+import 'package:wystaw_smieci/background_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting(Constants.locale, null);
+  initializeBackgroundService();
   runApp(const MyApp());
 }
 
