@@ -8,7 +8,9 @@ import 'city_selection_page.dart';
 import '../utils/date_utils.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'dart:async';
+import 'dart:io';
 
 class SchedulePage extends StatefulWidget {
   final List<String> selectedCities;
@@ -64,45 +66,55 @@ class SchedulePageState extends State<SchedulePage> {
 
   void _scheduleDailyNotifications() {
     if (_notificationsEnabled) {
-      _scheduleNotificationForTomorrow();
+      _scheduleNotifications();
     }
   }
 
-  void _scheduleNotificationForTomorrow() {
+  void _scheduleNotifications() async {
     final now = DateTime.now();
-    final tomorrow =
-        DateTime(now.year, now.month, now.day + 1, 16); // 4 PM tomorrow
-    // final durationUntilTomorrow = tomorrow.difference(now);
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final city = widget.selectedCities[0];
+    final eventsToNotify = getEventsForCity(city).where((event) {
+      final eventDate = DateTime.parse(event['date']!);
+      return eventDate.year == tomorrow.year &&
+          eventDate.month == tomorrow.month &&
+          eventDate.day == tomorrow.day;
+    }).toList();
 
-    Timer(Duration(seconds: 10), () async {
-      final eventsTomorrow = widget.selectedCities
-          .expand((city) => getEventsForCity(city))
-          .where((event) {
+    if (eventsToNotify.isNotEmpty) {
+      for (var event in eventsToNotify) {
         final eventDate = DateTime.parse(event['date']!);
-        return eventDate.year == tomorrow.year &&
-            eventDate.month == tomorrow.month &&
-            eventDate.day == tomorrow.day;
-      }).toList();
+        final eventID =
+            '${city}_${event['name']}_${eventDate.day}/${eventDate.month}/${eventDate.year}';
+        print("scheduling event with id: '$eventID' for '$tomorrow'");
 
-      if (eventsTomorrow.isNotEmpty) {
-        final eventNames =
-            eventsTomorrow.map((event) => event['name']).join(', ');
-        await flutterLocalNotificationsPlugin.show(
-          0,
-          'Events for Tomorrow no',
-          eventNames,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              Constants.androidNotificationID,
-              Constants.androidNotificationName,
-              channelDescription:
-                  Constants.androidNotificationChannelDescription,
+        if (Platform.isLinux) {
+          return;
+        }
+
+        try {
+          await flutterLocalNotificationsPlugin.show(
+            eventID.hashCode,
+            LangPL.prepareForTomorrow,
+            event['name'],
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                Constants.androidNotificationChannelID,
+                Constants.androidNotificationName,
+                channelDescription:
+                    Constants.androidNotificationChannelDescription,
+              ),
+              linux: LinuxNotificationDetails(),
             ),
-            linux: LinuxNotificationDetails(),
-          ),
-        );
+          );
+          print(
+              "Notification scheduled successfully for event: \\${event['name']}");
+        } catch (e) {
+          print(
+              "Error scheduling notification for event: \\${event['name']}, Error: \\${e}");
+        }
       }
-    });
+    }
   }
 
   @override

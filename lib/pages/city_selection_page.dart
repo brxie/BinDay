@@ -42,7 +42,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
     'Wysiołek Luborzycki',
     'Zastów'
   ];
-  String? _selectedCity;
 
   @override
   void didChangeDependencies() {
@@ -57,9 +56,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
     final prefs = await SharedPreferences.getInstance();
     final lastCity = prefs.getString('selectedCity');
     if (lastCity != null) {
-      setState(() {
-        _selectedCity = lastCity;
-      });
       // Navigate to SchedulePage if a city was previously selected
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
@@ -134,9 +130,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                         ),
                       ),
                       onTap: () {
-                        setState(() {
-                          _selectedCity = city;
-                        });
                         _saveSelectedCity(city);
                         Navigator.push(
                           context,

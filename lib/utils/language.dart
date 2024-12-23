@@ -4,6 +4,8 @@ class LangPL {
   static const String upcomingEvents = 'Najbliższy odbiór odpadów';
   static const String backToCitySelection = 'Wybór miejscowości';
   static const String getNotifications = 'Powiadom';
+  static const String prepareForTomorrow = 'Przygotuj na jutro';
+
   // Add Polish translations for weekdays
   static const String monday = 'Poniedziałek';
   static const String tuesday = 'Wtorek';
