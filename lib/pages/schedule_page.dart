@@ -11,6 +11,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'dart:async';
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 class SchedulePage extends StatefulWidget {
   final List<String> selectedCities;
@@ -64,7 +65,14 @@ class SchedulePageState extends State<SchedulePage> {
     tz.initializeTimeZones();
   }
 
-  void _scheduleDailyNotifications() {
+  Future<void> requestNotificationPermission() async {
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
+  }
+
+  void _scheduleDailyNotifications() async {
+    await requestNotificationPermission();
     if (_notificationsEnabled) {
       _scheduleNotifications();
     }
