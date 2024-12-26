@@ -6,12 +6,7 @@ import 'package:wystaw_smieci/utils/language.dart';
 import '../data/events.dart';
 import 'city_selection_page.dart';
 import '../utils/date_utils.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'dart:async';
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
 
 class SchedulePage extends StatefulWidget {
   final List<String> selectedCities;
@@ -25,104 +20,34 @@ class SchedulePage extends StatefulWidget {
 class SchedulePageState extends State<SchedulePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  bool _notificationsEnabled = true;
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  List<String> _enabledCities = [];
 
   @override
   void initState() {
     super.initState();
     _loadNotificationPreference();
-    _initializeNotifications();
-    _scheduleDailyNotifications();
   }
 
   Future<void> _loadNotificationPreference() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _notificationsEnabled = prefs.getBool('notificationsEnabled') ?? true;
+      _enabledCities =
+          prefs.getStringList(Constants.notificationsEnabledKey) ?? [];
     });
   }
 
-  Future<void> _saveNotificationPreference(bool value) async {
+  Future<void> _saveNotificationPreference(String city, bool active) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('notificationsEnabled', value);
-  }
-
-  void _initializeNotifications() {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      linux: LinuxInitializationSettings(
-        defaultActionName: 'Open',
-      ),
-    );
-
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    tz.initializeTimeZones();
-  }
-
-  Future<void> requestNotificationPermission() async {
-    if (await Permission.notification.isDenied) {
-      await Permission.notification.request();
-    }
-  }
-
-  void _scheduleDailyNotifications() async {
-    await requestNotificationPermission();
-    if (_notificationsEnabled) {
-      _scheduleNotifications();
-    }
-  }
-
-  void _scheduleNotifications() async {
-    final now = DateTime.now();
-    final tomorrow = DateTime(now.year, now.month, now.day + 1);
-    final city = widget.selectedCities[0];
-    final eventsToNotify = getEventsForCity(city).where((event) {
-      final eventDate = DateTime.parse(event['date']!);
-      return eventDate.year == tomorrow.year &&
-          eventDate.month == tomorrow.month &&
-          eventDate.day == tomorrow.day;
-    }).toList();
-
-    if (eventsToNotify.isNotEmpty) {
-      for (var event in eventsToNotify) {
-        final eventDate = DateTime.parse(event['date']!);
-        final eventID =
-            '${city}_${event['name']}_${eventDate.day}/${eventDate.month}/${eventDate.year}';
-        print("scheduling event with id: '$eventID' for '$tomorrow'");
-
-        if (Platform.isLinux) {
-          return;
-        }
-
-        try {
-          await flutterLocalNotificationsPlugin.show(
-            eventID.hashCode,
-            LangPL.prepareForTomorrow,
-            event['name'],
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                Constants.androidNotificationChannelID,
-                Constants.androidNotificationName,
-                channelDescription:
-                    Constants.androidNotificationChannelDescription,
-              ),
-              linux: LinuxNotificationDetails(),
-            ),
-          );
-          print(
-              "Notification scheduled successfully for event: \\${event['name']}");
-        } catch (e) {
-          print(
-              "Error scheduling notification for event: \\${event['name']}, Error: \\${e}");
-        }
+    final List<String> enabledCities =
+        prefs.getStringList(Constants.notificationsEnabledKey) ?? [];
+    if (active) {
+      if (!enabledCities.contains(city)) {
+        enabledCities.add(city);
       }
+    } else {
+      enabledCities.remove(city);
     }
+    prefs.setStringList(Constants.notificationsEnabledKey, enabledCities);
   }
 
   @override
@@ -210,11 +135,15 @@ class SchedulePageState extends State<SchedulePage> {
                   ),
                 ),
                 Switch(
-                  value: _notificationsEnabled,
+                  value: _enabledCities.contains(city),
                   onChanged: (value) {
                     setState(() {
-                      _notificationsEnabled = value;
-                      _saveNotificationPreference(value);
+                      if (value) {
+                        _enabledCities.add(city);
+                      } else {
+                        _enabledCities.remove(city);
+                      }
+                      _saveNotificationPreference(city, value);
                     });
                   },
                   activeColor: Colors.green[700],
