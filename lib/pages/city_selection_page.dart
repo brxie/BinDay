@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wystaw_smieci/data/events.dart';
 import 'package:wystaw_smieci/utils/language.dart';
 import 'schedule_page.dart';
 import '../utils/constants.dart';
@@ -14,35 +15,6 @@ class CitySelectionPage extends StatefulWidget {
 }
 
 class _CitySelectionPageState extends State<CitySelectionPage> {
-  final List<String> _cities = [
-    'Baranówka',
-    'Czulice',
-    'Dojazdów',
-    'Głęboka',
-    'Goszcza',
-    'Goszyce',
-    'Karniów',
-    'Kocmyrzów',
-    'Krzysztoforzyce',
-    'Łosokowice',
-    'Luborzyca',
-    'Łuczyce (część I Krakowska)',
-    'Łuczyce (część II Prądnik)',
-    'Maciejowice',
-    'Marszowice',
-    'Pietrzejowice',
-    'Prusy',
-    'Rawałowice',
-    'Sadowie',
-    'Skrzeszowice',
-    'Sulechów',
-    'Wiktorowice',
-    'Wilków',
-    'Wola Luborzycka',
-    'Wysiołek Luborzycki',
-    'Zastów'
-  ];
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -103,13 +75,13 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
             ),
             Expanded(
               child: ListView.separated(
-                itemCount: _cities.length,
+                itemCount: getCities().length,
                 separatorBuilder: (context, index) => Divider(
                   color: Colors.green[200],
                   thickness: 1,
                 ),
                 itemBuilder: (context, index) {
-                  final city = _cities[index];
+                  final city = getCities()[index];
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 0),

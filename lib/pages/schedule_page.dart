@@ -167,12 +167,7 @@ class SchedulePageState extends State<SchedulePage> {
               elevation: 4,
               margin: const EdgeInsets.symmetric(vertical: 2.0),
               child: ListTile(
-                leading: Icon(
-                  event['name']?.contains('Recycling') ?? false
-                      ? Icons.recycling
-                      : Icons.delete,
-                  color: Colors.green[700],
-                ),
+                leading: _getEventIcon(event),
                 title: Text(
                   event['name'] ?? '',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -191,6 +186,26 @@ class SchedulePageState extends State<SchedulePage> {
         ],
       ),
     );
+  }
+
+  Icon _getEventIcon(Map<String, String> event) {
+    final name = event['name']?.toLowerCase();
+    final (icon, color) = switch (name) {
+      final n when n?.contains('zmieszane') ?? false => (
+          Icons.delete,
+          const Color.fromARGB(255, 73, 75, 75)
+        ),
+      final n when n?.contains('bio') ?? false => (
+          Icons.compost,
+          const Color.fromARGB(255, 98, 73, 64)
+        ),
+      final n when n?.contains('segregowane') ?? false => (
+          Icons.recycling,
+          const Color.fromARGB(255, 173, 161, 54)
+        ),
+      _ => (Icons.delete, Colors.green[700]),
+    };
+    return Icon(icon, color: color);
   }
 
   Widget _buildSelectedDateText(Iterable<Map<String, String>> eventsToday) {
