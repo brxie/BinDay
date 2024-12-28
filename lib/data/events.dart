@@ -1,4 +1,15 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wystaw_smieci/utils/constants.dart';
+import 'dart:convert';
+
 List<String> getCities() {
+  SharedPreferences.getInstance().then((prefs) {
+    prefs.reload();
+    final cities = prefs.getStringList(Constants.sharedPrefEventCitiesKey);
+    if (cities != null && cities.isNotEmpty) {
+      return cities;
+    }
+  });
   return [
     'Baranówka',
     'Czulice',

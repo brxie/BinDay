@@ -62,7 +62,7 @@ void onStart(ServiceInstance service) async {
   while (true) {
     prefs.reload();
     var enabledCitiesRaw =
-        prefs.getStringList(Constants.notificationsEnabledKey);
+        prefs.getStringList(Constants.sharedPrefnotificationsEnabledKey);
 
     var notificationsSent = processNotifications(enabledCitiesRaw!);
     if (notificationsSent) {

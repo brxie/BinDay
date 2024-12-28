@@ -32,14 +32,15 @@ class SchedulePageState extends State<SchedulePage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _enabledCities =
-          prefs.getStringList(Constants.notificationsEnabledKey) ?? [];
+          prefs.getStringList(Constants.sharedPrefnotificationsEnabledKey) ??
+              [];
     });
   }
 
   Future<void> _saveNotificationPreference(String city, bool active) async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> enabledCities =
-        prefs.getStringList(Constants.notificationsEnabledKey) ?? [];
+        prefs.getStringList(Constants.sharedPrefnotificationsEnabledKey) ?? [];
     if (active) {
       if (!enabledCities.contains(city)) {
         enabledCities.add(city);
@@ -47,7 +48,8 @@ class SchedulePageState extends State<SchedulePage> {
     } else {
       enabledCities.remove(city);
     }
-    prefs.setStringList(Constants.notificationsEnabledKey, enabledCities);
+    prefs.setStringList(
+        Constants.sharedPrefnotificationsEnabledKey, enabledCities);
   }
 
   @override

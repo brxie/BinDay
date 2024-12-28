@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class Constants {
@@ -12,9 +10,12 @@ class Constants {
   static const String androidNotificationChannelID = "default_channel";
   static const String androidNotificationName = "Calendar Events Notifications";
   static const String androidNotificationChannelDescription = "";
-  static const String notificationsEnabledKey = "notificationsEnabled";
 
   static const Duration notificationCheckBackoff = Duration(seconds: 1);
 
   static var locale = "pl_PL";
+
+  static const String sharedPrefEventCitiesKey = "eventCities";
+  static const String sharedPrefnotificationsEnabledKey =
+      "notificationsEnabled";
 }
