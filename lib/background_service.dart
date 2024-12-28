@@ -58,6 +58,8 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
+  fetchEvents();
+
   var prefs = await SharedPreferences.getInstance();
   while (true) {
     prefs.reload();
@@ -73,7 +75,15 @@ void onStart(ServiceInstance service) async {
   }
 }
 
+void fetchEvents() async {
+  while (true) {
+    await Future.delayed(Duration(seconds: 1));
+    print("fetching events via http");
+  }
+}
+
 bool processNotifications(List<String> enabledCitiesRaw) {
+  print("processing notifications");
   final now = DateTime.now();
   final tomorrow = DateTime(now.year, now.month, now.day + 1);
   var notificationsSent = false;

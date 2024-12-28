@@ -25,7 +25,6 @@ List<Map<String, String>> getEventsForCity(String city) {
           .toList();
     }
   });
-  // Example events data
   return events;
 }
 
