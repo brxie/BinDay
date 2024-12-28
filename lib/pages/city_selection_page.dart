@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wystaw_smieci/data/events.dart';
+import 'package:wystaw_smieci/events/events.dart';
 import 'package:wystaw_smieci/utils/language.dart';
 import 'schedule_page.dart';
 import '../utils/constants.dart';

@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
 import 'package:wystaw_smieci/utils/language.dart';
-import '../data/events.dart';
+import '../events/events.dart';
 import 'city_selection_page.dart';
 import '../utils/date_utils.dart';
 import 'dart:async';

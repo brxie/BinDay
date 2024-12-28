@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wystaw_smieci/data/events.dart';
+import 'package:wystaw_smieci/events/events.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
 import 'package:wystaw_smieci/utils/language.dart';
 import 'package:permission_handler/permission_handler.dart';

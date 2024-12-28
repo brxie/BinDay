@@ -16,6 +16,7 @@ class Constants {
   static var locale = "pl_PL";
 
   static const String sharedPrefEventCitiesKey = "eventCities";
+  static const String sharedPrefEventsKeyPrefix = "events_";
   static const String sharedPrefnotificationsEnabledKey =
       "notificationsEnabled";
 }
