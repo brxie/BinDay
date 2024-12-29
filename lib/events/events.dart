@@ -3,16 +3,13 @@ import 'package:wystaw_smieci/events/data.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
 import 'dart:convert';
 
-List<String> getCities() {
+Future<List<String>> getCities() async {
   List<String> result = citiesData;
-  SharedPreferences.getInstance().then((prefs) {
-    var citiesList = prefs.getStringList(Constants.sharedPrefEventCitiesKey);
-    if (citiesList != null && citiesList.isNotEmpty) {
-      result = citiesList;
-    }
-  }).catchError((error) {
-    // Handle error if needed
-  });
+  final prefs = await SharedPreferences.getInstance();
+  var citiesList = prefs.getStringList(Constants.sharedPrefEventCitiesKey);
+  if (citiesList != null && citiesList.isNotEmpty) {
+    result = citiesList;
+  }
 
   return result;
 }
