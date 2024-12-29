@@ -20,6 +20,8 @@ class Constants {
   static const String sharedPrefnotificationsEnabledKey =
       "notificationsEnabled";
 
-  static const String apiBaseUrl =
-      "https://testkiedysmieciapi.free.beeceptor.com";
+  // static const String apiBaseUrl =
+  // "https://testkiedysmieciapi.free.beeceptor.com";
+
+  static const String apiBaseUrl = "http://localhost:8080";
 }

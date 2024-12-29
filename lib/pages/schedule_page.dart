@@ -19,13 +19,17 @@ class SchedulePage extends StatefulWidget {
 
 class SchedulePageState extends State<SchedulePage> {
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime? _selectedDay = DateTime.now();
   List<String> _enabledCities = [];
+  Map<String, List<Map<String, String>>> _eventsByCity = {};
+  List<Map<String, String>> _nearestEvents = [];
 
   @override
   void initState() {
     super.initState();
     _loadNotificationPreference();
+    _loadEvents();
+    _loadNearestEvents();
   }
 
   Future<void> _loadNotificationPreference() async {
@@ -52,6 +56,24 @@ class SchedulePageState extends State<SchedulePage> {
         Constants.sharedPrefnotificationsEnabledKey, enabledCities);
   }
 
+  Future<void> _loadEvents() async {
+    for (var city in widget.selectedCities) {
+      final events = await getEventsForCity(city);
+      setState(() {
+        _eventsByCity[city] = events;
+      });
+    }
+  }
+
+  Future<void> _loadNearestEvents() async {
+    for (var city in widget.selectedCities) {
+      final events = await getNearestEventsForCity(city);
+      setState(() {
+        _nearestEvents = events;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,12 +91,20 @@ class SchedulePageState extends State<SchedulePage> {
         ),
         child: ListView(
           children: widget.selectedCities.map((city) {
-            final eventsToday = getEventsForCity(city).where((event) {
+            final events = _eventsByCity[city];
+            if (events == null) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            final eventsToday = events.where((event) {
               final eventDate = DateTime.parse(event['date']!);
               return eventDate.year == _selectedDay!.year &&
                   eventDate.month == _selectedDay!.month &&
                   eventDate.day == _selectedDay!.day;
-            });
+            }).toList();
+
             return Column(
               children: <Widget>[
                 // Event List
@@ -105,6 +135,12 @@ class SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildEventHeaderList(BuildContext context, String city) {
+    if (_nearestEvents.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -164,7 +200,7 @@ class SchedulePageState extends State<SchedulePage> {
                 ),
           ),
           const SizedBox(height: 2),
-          ...getNearestEventsForCity(city).map((event) {
+          ..._nearestEvents.map((event) {
             return Card(
               elevation: 4,
               margin: const EdgeInsets.symmetric(vertical: 2.0),
@@ -267,8 +303,8 @@ class SchedulePageState extends State<SchedulePage> {
         });
       },
       eventLoader: (day) {
-        final events = getEventsForCity(city);
-        final matchingEvents = events
+        final events = _eventsByCity[city] ?? [];
+        return events
             .where((event) {
               final eventDate = DateTime.parse(event['date']!);
               return DateTime(eventDate.year, eventDate.month, eventDate.day)
@@ -276,7 +312,6 @@ class SchedulePageState extends State<SchedulePage> {
             })
             .map((event) => event['name']!)
             .toList();
-        return matchingEvents;
       },
       calendarStyle: CalendarStyle(
         todayDecoration: BoxDecoration(

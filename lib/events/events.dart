@@ -14,24 +14,23 @@ Future<List<String>> getCities() async {
   return result;
 }
 
-List<Map<String, String>> getEventsForCity(String city) {
-  SharedPreferences.getInstance().then((prefs) {
-    prefs.reload();
-    final eventsJson =
-        prefs.getStringList('${Constants.sharedPrefEventsKeyPrefix}_$city');
-    if (eventsJson != null && eventsJson.isNotEmpty) {
-      return eventsJson
-          .map((e) => Map<String, String>.from(json.decode(e)))
-          .toList();
-    }
-  });
+Future<List<Map<String, String>>> getEventsForCity(String city) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.reload();
+  final eventsJson =
+      prefs.getStringList('${Constants.sharedPrefEventsKeyPrefix}_$city');
+  if (eventsJson != null && eventsJson.isNotEmpty) {
+    return eventsJson
+        .map((e) => Map<String, String>.from(json.decode(e)))
+        .toList();
+  }
   return eventsData;
 }
 
-List<Map<String, String>> getNearestEventsForCity(String city) {
+Future<List<Map<String, String>>> getNearestEventsForCity(String city) async {
   final now =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  final events = getEventsForCity(city);
+  final events = await getEventsForCity(city);
 
   // Find the nearest date
   DateTime? nearestDate;

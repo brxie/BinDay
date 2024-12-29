@@ -68,7 +68,7 @@ void onStart(ServiceInstance service) async {
     var enabledCitiesRaw =
         prefs.getStringList(Constants.sharedPrefnotificationsEnabledKey);
 
-    var notificationsSent = processNotifications(enabledCitiesRaw!);
+    var notificationsSent = await processNotifications(enabledCitiesRaw!);
     if (notificationsSent) {
       await Future.delayed(Duration(minutes: 1));
     } else {
@@ -99,14 +99,14 @@ void fetchEvents() async {
   }
 }
 
-bool processNotifications(List<String> enabledCitiesRaw) {
+Future<bool> processNotifications(List<String> enabledCitiesRaw) async {
   print("processing notifications");
   final now = DateTime.now();
   final tomorrow = DateTime(now.year, now.month, now.day + 1);
   var notificationsSent = false;
 
   for (var city in enabledCitiesRaw) {
-    final eventsToNotify = getEventsForCity(city).where((event) {
+    final eventsToNotify = (await getEventsForCity(city)).where((event) {
       final eventDate = DateTime.parse(event['date']!)
           .add(Duration(hours: Constants.notificationsHour));
       return eventDate.year == tomorrow.year &&
@@ -125,7 +125,7 @@ bool processNotifications(List<String> enabledCitiesRaw) {
 
       try {
         flutterLocalNotificationsPlugin.show(
-          "$city-$event['name']-${event['date']}".hashCode,
+          "$city-${event['name']}-${event['date']}".hashCode,
           "$city: ${LangPL.prepareForTomorrow}",
           event['name'],
           NotificationDetails(
