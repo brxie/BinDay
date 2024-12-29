@@ -19,4 +19,7 @@ class Constants {
   static const String sharedPrefEventsKeyPrefix = "events_";
   static const String sharedPrefnotificationsEnabledKey =
       "notificationsEnabled";
+
+  static const String apiBaseUrl =
+      "https://testkiedysmieciapi.free.beeceptor.com";
 }

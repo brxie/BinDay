@@ -4,14 +4,17 @@ import 'package:wystaw_smieci/utils/constants.dart';
 import 'dart:convert';
 
 List<String> getCities() {
+  List<String> result = citiesData;
   SharedPreferences.getInstance().then((prefs) {
-    prefs.reload();
-    final cities = prefs.getStringList(Constants.sharedPrefEventCitiesKey);
-    if (cities != null && cities.isNotEmpty) {
-      return cities;
+    var citiesList = prefs.getStringList(Constants.sharedPrefEventCitiesKey);
+    if (citiesList != null && citiesList.isNotEmpty) {
+      result = citiesList;
     }
+  }).catchError((error) {
+    // Handle error if needed
   });
-  return cities;
+
+  return result;
 }
 
 List<Map<String, String>> getEventsForCity(String city) {
@@ -25,7 +28,7 @@ List<Map<String, String>> getEventsForCity(String city) {
           .toList();
     }
   });
-  return events;
+  return eventsData;
 }
 
 List<Map<String, String>> getNearestEventsForCity(String city) {

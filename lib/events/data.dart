@@ -1,4 +1,4 @@
-const List<String> cities = [
+const List<String> citiesData = [
   'Baranówka',
   'Czulice',
   'Dojazdów',
@@ -27,7 +27,7 @@ const List<String> cities = [
   'Zastów'
 ];
 
-List<Map<String, String>> events = [
+List<Map<String, String>> eventsData = [
   {"date": "2024-12-24", "name": "odpady BIO"},
   {"date": "2024-12-24", "name": "odpady zmieszane"},
   {"date": "2024-12-24", "name": "odpady segregowane"},

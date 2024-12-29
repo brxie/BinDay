@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -11,6 +12,7 @@ import 'package:wystaw_smieci/utils/constants.dart';
 import 'package:wystaw_smieci/utils/language.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:http/http.dart' as http;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -77,8 +79,23 @@ void onStart(ServiceInstance service) async {
 
 void fetchEvents() async {
   while (true) {
-    await Future.delayed(Duration(seconds: 1));
-    print("fetching events via http");
+    await Future.delayed(Duration(seconds: 60));
+
+    try {
+      var citiesResponse =
+          await http.get(Uri.parse("${Constants.apiBaseUrl}/cities"));
+      if (citiesResponse.statusCode != 200) {
+        print("Failed to load cities: ${citiesResponse.statusCode}");
+        continue;
+      }
+      var cities = List<String>.from(jsonDecode(citiesResponse.body));
+      print("cities: $cities");
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setStringList(Constants.sharedPrefEventCitiesKey, cities);
+    } on SocketException catch (e) {
+      print("Failed to fetch cities: $e");
+    }
   }
 }
 
