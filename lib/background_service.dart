@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wystaw_smieci/events/events.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
+import 'package:wystaw_smieci/utils/convert.dart';
 import 'package:wystaw_smieci/utils/language.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -61,7 +62,6 @@ void onStart(ServiceInstance service) async {
   });
 
   fetchEvents();
-
   var prefs = await SharedPreferences.getInstance();
   while (true) {
     prefs.reload();
@@ -70,7 +70,7 @@ void onStart(ServiceInstance service) async {
 
     var notificationsSent = await processNotifications(enabledCitiesRaw!);
     if (notificationsSent) {
-      await Future.delayed(Duration(minutes: 1));
+      await Future.delayed(Duration(hours: 1));
     } else {
       await Future.delayed(Constants.notificationCheckBackoff);
     }
@@ -79,23 +79,39 @@ void onStart(ServiceInstance service) async {
 
 void fetchEvents() async {
   while (true) {
-    await Future.delayed(Duration(seconds: 60));
-
     try {
       var citiesResponse =
           await http.get(Uri.parse("${Constants.apiBaseUrl}/cities"));
       if (citiesResponse.statusCode != 200) {
         print("Failed to load cities: ${citiesResponse.statusCode}");
+        await Future.delayed(Constants.fetchEventsDelay);
         continue;
       }
-      var cities = List<String>.from(jsonDecode(citiesResponse.body));
-      print("cities: $cities");
+      var cities =
+          List<String>.from(jsonDecode(utf8.decode(citiesResponse.bodyBytes)));
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setStringList(Constants.sharedPrefEventCitiesKey, cities);
+
+      for (var city in cities) {
+        var eventsResponse = await http
+            .get(Uri.parse("${Constants.apiBaseUrl}/events/${toCityID(city)}"));
+        if (eventsResponse.statusCode != 200) {
+          print("Failed to load events: ${eventsResponse.statusCode}");
+          continue;
+        }
+        var events = List<Map<String, dynamic>>.from(
+            jsonDecode(utf8.decode(eventsResponse.bodyBytes)));
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setStringList(
+            '${Constants.sharedPrefEventsKeyPrefix}_${toCityID(city)}',
+            events.map((e) => jsonEncode(e)).toList());
+      }
     } on SocketException catch (e) {
-      print("Failed to fetch cities: $e");
+      print(
+          "Failed to update events in shared preferences due to http error: $e");
     }
+    await Future.delayed(Constants.fetchEventsDelay);
   }
 }
 

@@ -12,6 +12,7 @@ class Constants {
   static const String androidNotificationChannelDescription = "";
 
   static const Duration notificationCheckBackoff = Duration(seconds: 1);
+  static const Duration fetchEventsDelay = Duration(days: 1);
 
   static var locale = "pl_PL";
 
@@ -20,8 +21,8 @@ class Constants {
   static const String sharedPrefnotificationsEnabledKey =
       "notificationsEnabled";
 
-  // static const String apiBaseUrl =
-  // "https://testkiedysmieciapi.free.beeceptor.com";
+  static const String apiBaseUrl =
+      "https://testkiedysmieciapi.free.beeceptor.com";
 
-  static const String apiBaseUrl = "http://localhost:8080";
+  // static const String apiBaseUrl = "http://localhost:8080";
 }

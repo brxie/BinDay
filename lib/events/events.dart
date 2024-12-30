@@ -3,6 +3,8 @@ import 'package:wystaw_smieci/events/data.dart';
 import 'package:wystaw_smieci/utils/constants.dart';
 import 'dart:convert';
 
+import 'package:wystaw_smieci/utils/convert.dart';
+
 Future<List<String>> getCities() async {
   List<String> result = citiesData;
   final prefs = await SharedPreferences.getInstance();
@@ -17,14 +19,14 @@ Future<List<String>> getCities() async {
 Future<List<Map<String, String>>> getEventsForCity(String city) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.reload();
-  final eventsJson =
-      prefs.getStringList('${Constants.sharedPrefEventsKeyPrefix}_$city');
+  final eventsJson = prefs.getStringList(
+      '${Constants.sharedPrefEventsKeyPrefix}_${toCityID(city)}');
   if (eventsJson != null && eventsJson.isNotEmpty) {
     return eventsJson
         .map((e) => Map<String, String>.from(json.decode(e)))
         .toList();
   }
-  return eventsData;
+  return eventsData[toCityID(city)] ?? [];
 }
 
 Future<List<Map<String, String>>> getNearestEventsForCity(String city) async {

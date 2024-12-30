@@ -27,28 +27,35 @@ const List<String> citiesData = [
   'Zastów'
 ];
 
-List<Map<String, String>> eventsData = [
-  {"date": "2024-12-24", "name": "odpady BIO"},
-  {"date": "2024-12-24", "name": "odpady zmieszane"},
-  {"date": "2024-12-24", "name": "odpady segregowane"},
-  {"date": "2024-12-25", "name": "odpady BIO"},
-  {"date": "2024-12-25", "name": "odpady zmieszane"},
-  {"date": "2024-12-25", "name": "odpady segregowane"},
-  {"date": "2024-12-26", "name": "odpady BIO"},
-  {"date": "2024-12-26", "name": "odpady zmieszane"},
-  {"date": "2024-12-26", "name": "odpady segregowane"},
-  {"date": "2024-12-27", "name": "odpady BIO"},
-  {"date": "2024-12-27", "name": "odpady zmieszane"},
-  {"date": "2024-12-27", "name": "odpady segregowane"},
-  {"date": "2024-12-28", "name": "odpady BIO"},
-  {"date": "2024-12-28", "name": "odpady zmieszane"},
-  {"date": "2024-12-28", "name": "odpady segregowane"},
-  {"date": "2024-12-29", "name": "odpady BIO"},
-  {"date": "2024-12-29", "name": "odpady zmieszane"},
-  {"date": "2024-12-29", "name": "odpady segregowane"},
-  {"date": "2024-12-30", "name": "odpady zmieszane"},
-  {"date": "2024-12-30", "name": "odpady segregowane"},
-  {"date": "2024-12-31", "name": "odpady BIO"},
-  {"date": "2024-12-31", "name": "odpady zmieszane"},
-  {"date": "2024-12-31", "name": "odpady segregowanee"}
-];
+Map<String, List<Map<String, String>>> eventsData = {
+  "baranowka": [
+    {"date": "2024-12-31", "name": "odpady segregowane"}
+  ],
+  "czulice": [],
+  "dojazdow": [],
+  "gleboka": [],
+  "goszcza": [],
+  "goszyce": [],
+  "karniow": [],
+  "kocmyrzow": [],
+  "krzysztoforzyce": [],
+  "losokowice": [
+    {"date": "2024-12-31", "name": "odpady segregowane"}
+  ],
+  "luborzyca": [],
+  "luczyce_czesc_i_krakowska": [],
+  "luczyce_czesc_ii_pradnik": [],
+  "maciejowice": [],
+  "marszowice": [],
+  "pietrzejowice": [],
+  "prusy": [],
+  "rawalowice": [],
+  "sadowie": [],
+  "skrzeszowice": [],
+  "sulechow": [],
+  "wiktorowice": [],
+  "wilkow": [],
+  "wola_luborzycka": [],
+  "wysiolek_luborzycki": [],
+  "zastow": []
+};
