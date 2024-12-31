@@ -229,10 +229,10 @@ class SchedulePageState extends State<SchedulePage> {
   Icon _getEventIcon(Map<String, String> event) {
     final name = event['name']?.toLowerCase();
     final (icon, color) = switch (name) {
-      final n when n?.contains('zmieszane') ?? false => (
-          Icons.delete,
-          const Color.fromARGB(255, 73, 75, 75)
-        ),
+      final n
+          when (n != null &&
+              (n.contains('zmieszane') || n.contains('komunalne'))) =>
+        (Icons.delete, const Color.fromARGB(255, 73, 75, 75)),
       final n when n?.contains('bio') ?? false => (
           Icons.compost,
           const Color.fromARGB(255, 98, 73, 64)

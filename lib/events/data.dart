@@ -28,34 +28,275 @@ const List<String> citiesData = [
 ];
 
 Map<String, List<Map<String, String>>> eventsData = {
-  "baranowka": [
-    {"date": "2024-12-31", "name": "odpady segregowane"}
-  ],
-  "czulice": [],
-  "dojazdow": [],
-  "gleboka": [],
-  "goszcza": [],
-  "goszyce": [],
-  "karniow": [],
-  "kocmyrzow": [],
-  "krzysztoforzyce": [],
-  "losokowice": [
-    {"date": "2024-12-31", "name": "odpady segregowane"}
-  ],
-  "luborzyca": [],
-  "luczyce_czesc_i_krakowska": [],
-  "luczyce_czesc_ii_pradnik": [],
-  "maciejowice": [],
-  "marszowice": [],
-  "pietrzejowice": [],
-  "prusy": [],
-  "rawalowice": [],
-  "sadowie": [],
-  "skrzeszowice": [],
-  "sulechow": [],
-  "wiktorowice": [],
-  "wilkow": [],
-  "wola_luborzycka": [],
-  "wysiolek_luborzycki": [],
-  "zastow": []
-};
+    "czulice": [
+      {"date": "2025-01-02", "name": "odpady zmieszane"},
+      {"date": "2025-01-02", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-16", "name": "odpady zmieszane"},
+      {"date": "2025-01-30", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-27", "name": "odpady zmieszane"},
+      {"date": "2025-01-10", "name": "odpady segregowane"},
+      {"date": "2025-02-14", "name": "odpady segregowane"}
+    ],
+    "gleboka": [
+      {"date": "2025-01-02", "name": "odpady zmieszane"},
+      {"date": "2025-01-02", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-16", "name": "odpady zmieszane"},
+      {"date": "2025-01-30", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-27", "name": "odpady zmieszane"},
+      {"date": "2025-01-24", "name": "odpady segregowane"},
+      {"date": "2025-02-28", "name": "odpady segregowane"}
+    ],
+    "goszcza": [
+      {"date": "2025-01-03", "name": "odpady zmieszane"},
+      {"date": "2025-01-03", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-03", "name": "odpady segregowane"},
+      {"date": "2025-01-17", "name": "odpady zmieszane"},
+      {"date": "2025-01-31", "name": "odpady zmieszane"},
+      {"date": "2025-02-14", "name": "odpady zmieszane"},
+      {"date": "2025-02-14", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-28", "name": "odpady zmieszane"},
+      {"date": "2025-01-11", "name": "odpady segregowane"}
+    ],
+    "goszyce": [
+      {"date": "2025-01-07", "name": "odpady zmieszane"},
+      {"date": "2025-01-07", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-21", "name": "odpady zmieszane"},
+      {"date": "2025-02-04", "name": "odpady zmieszane"},
+      {"date": "2025-02-04", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-18", "name": "odpady zmieszane"},
+      {"date": "2025-01-04", "name": "odpady segregowane"},
+      {"date": "2025-02-05", "name": "odpady segregowane"}
+    ],
+    "karniow": [
+      {"date": "2025-01-02", "name": "odpady zmieszane"},
+      {"date": "2025-01-02", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-16", "name": "odpady zmieszane"},
+      {"date": "2025-01-30", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-27", "name": "odpady zmieszane"},
+      {"date": "2025-01-10", "name": "odpady segregowane"},
+      {"date": "2025-02-14", "name": "odpady segregowane"}
+    ],
+    "krzysztoforzyce": [
+      {"date": "2025-01-04", "name": "odpady zmieszane"},
+      {"date": "2025-01-04", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-15", "name": "odpady zmieszane"},
+      {"date": "2025-01-29", "name": "odpady zmieszane"},
+      {"date": "2025-02-12", "name": "odpady zmieszane"},
+      {"date": "2025-02-12", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-26", "name": "odpady zmieszane"},
+      {"date": "2025-01-16", "name": "odpady segregowane"},
+      {"date": "2025-02-20", "name": "odpady segregowane"}
+    ],
+    "losokowice": [
+      {"date": "2025-01-02", "name": "odpady zmieszane"},
+      {"date": "2025-01-02", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-16", "name": "odpady zmieszane"},
+      {"date": "2025-01-30", "name": "odpady zmieszane"},
+      {"date": "2025-01-13", "name": "odpady segregowane"},
+      {"date": "2025-02-13", "name": "odpady zmieszane"},
+      {"date": "2025-02-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-27", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady segregowane"}
+    ],
+    "luborzyca": [
+      {"date": "2025-01-28", "name": "odpady segregowane"},
+      {"date": "2025-02-25", "name": "odpady segregowane"},
+      {"date": "2025-01-14", "name": "odpady zmieszane"},
+      {"date": "2025-01-14", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-28", "name": "odpady zmieszane"},
+      {"date": "2025-02-11", "name": "odpady zmieszane"},
+      {"date": "2025-02-11", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-25", "name": "odpady zmieszane"}
+    ],
+    "luczyce_czesc_i_krakowska": [
+      {"date": "2025-01-11", "name": "odpady zmieszane"},
+      {"date": "2025-01-11", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-20", "name": "odpady zmieszane"},
+      {"date": "2025-02-03", "name": "odpady zmieszane"},
+      {"date": "2025-02-03", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-17", "name": "odpady zmieszane"},
+      {"date": "2025-01-08", "name": "odpady segregowane"},
+      {"date": "2025-02-12", "name": "odpady segregowane"}
+    ],
+    "luczyce_czesc_ii_pradnik": [
+      {"date": "2025-01-11", "name": "odpady zmieszane"},
+      {"date": "2025-01-11", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-20", "name": "odpady zmieszane"},
+      {"date": "2025-02-03", "name": "odpady zmieszane"},
+      {"date": "2025-02-03", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-17", "name": "odpady zmieszane"},
+      {"date": "2025-01-09", "name": "odpady segregowane"},
+      {"date": "2025-02-13", "name": "odpady segregowane"}
+    ],
+    "maciejowice": [
+      {"date": "2025-01-14", "name": "odpady zmieszane"},
+      {"date": "2025-01-14", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-28", "name": "odpady zmieszane"},
+      {"date": "2025-02-11", "name": "odpady zmieszane"},
+      {"date": "2025-02-11", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-25", "name": "odpady zmieszane"},
+      {"date": "2025-01-27", "name": "odpady segregowane"},
+      {"date": "2025-02-24", "name": "odpady segregowane"}
+    ],
+    "marszowice": [
+      {"date": "2025-01-07", "name": "odpady zmieszane"},
+      {"date": "2025-01-07", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-07", "name": "odpady segregowane"},
+      {"date": "2025-01-21", "name": "odpady zmieszane"},
+      {"date": "2025-02-04", "name": "odpady zmieszane"},
+      {"date": "2025-02-04", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-04", "name": "odpady segregowane"},
+      {"date": "2025-02-18", "name": "odpady zmieszane"}
+    ],
+    "pietrzejowice": [
+      {"date": "2025-01-14", "name": "odpady zmieszane"},
+      {"date": "2025-01-14", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-28", "name": "odpady zmieszane"},
+      {"date": "2025-02-11", "name": "odpady zmieszane"},
+      {"date": "2025-02-11", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-25", "name": "odpady zmieszane"},
+      {"date": "2025-01-17", "name": "odpady segregowane"},
+      {"date": "2025-02-21", "name": "odpady segregowane"}
+    ],
+    "prusy": [
+      {"date": "2025-01-03", "name": "odpady zmieszane"},
+      {"date": "2025-01-03", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-17", "name": "odpady zmieszane"},
+      {"date": "2025-01-31", "name": "odpady zmieszane"},
+      {"date": "2025-02-14", "name": "odpady zmieszane"},
+      {"date": "2025-02-14", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-28", "name": "odpady zmieszane"},
+      {"date": "2025-01-23", "name": "odpady segregowane"},
+      {"date": "2025-02-27", "name": "odpady segregowane"}
+    ],
+    "rawalowice": [
+      {"date": "2025-01-13", "name": "odpady zmieszane"},
+      {"date": "2025-01-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-27", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-24", "name": "odpady zmieszane"},
+      {"date": "2025-01-14", "name": "odpady segregowane"},
+      {"date": "2025-02-11", "name": "odpady segregowane"}
+    ],
+    "sadowie": [
+      {"date": "2025-01-03", "name": "odpady zmieszane"},
+      {"date": "2025-01-03", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-11", "name": "odpady segregowane"},
+      {"date": "2025-01-17", "name": "odpady zmieszane"},
+      {"date": "2025-01-31", "name": "odpady zmieszane"},
+      {"date": "2025-02-14", "name": "odpady zmieszane"},
+      {"date": "2025-02-14", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-28", "name": "odpady zmieszane"},
+      {"date": "2025-02-03", "name": "odpady segregowane"}
+    ],
+    "skrzeszowice": [
+      {"date": "2025-01-13", "name": "odpady zmieszane"},
+      {"date": "2025-01-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-13", "name": "odpady segregowane"},
+      {"date": "2025-01-27", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-10", "name": "odpady segregowane"},
+      {"date": "2025-02-24", "name": "odpady zmieszane"}
+    ],
+    "wilkow": [
+      {"date": "2025-01-13", "name": "odpady zmieszane"},
+      {"date": "2025-01-13", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-27", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady zmieszane"},
+      {"date": "2025-02-10", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-24", "name": "odpady zmieszane"},
+      {"date": "2025-01-02", "name": "odpady segregowane"},
+      {"date": "2025-02-06", "name": "odpady segregowane"}
+    ],
+    "wola_luborzycka": [
+      {"date": "2025-01-08", "name": "odpady zmieszane"},
+      {"date": "2025-01-08", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-22", "name": "odpady zmieszane"},
+      {"date": "2025-02-05", "name": "odpady zmieszane"},
+      {"date": "2025-02-05", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-19", "name": "odpady zmieszane"},
+      {"date": "2025-01-14", "name": "odpady segregowane"},
+      {"date": "2025-02-11", "name": "odpady segregowane"}
+    ],
+    "dojazdow": [
+      {"date": "2025-01-08", "name": "odpady zmieszane"},
+      {"date": "2025-01-08", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-22", "name": "odpady zmieszane"},
+      {"date": "2025-02-05", "name": "odpady zmieszane"},
+      {"date": "2025-02-05", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-19", "name": "odpady zmieszane"},
+      {"date": "2025-02-19", "name": "odpady segregowane"},
+      {"date": "2025-01-15", "name": "odpady segregowane"}
+    ],
+    "sulechow": [
+      {"date": "2025-01-09", "name": "odpady zmieszane"},
+      {"date": "2025-01-09", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-23", "name": "odpady zmieszane"},
+      {"date": "2025-02-06", "name": "odpady zmieszane"},
+      {"date": "2025-02-06", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-20", "name": "odpady zmieszane"},
+      {"date": "2025-01-24", "name": "odpady segregowane"},
+      {"date": "2025-02-28", "name": "odpady segregowane"}
+    ],
+    "baranowka": [
+      {"date": "2025-01-09", "name": "odpady zmieszane"},
+      {"date": "2025-01-09", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-23", "name": "odpady zmieszane"},
+      {"date": "2025-02-06", "name": "odpady zmieszane"},
+      {"date": "2025-02-06", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-20", "name": "odpady zmieszane"},
+      {"date": "2025-01-21", "name": "odpady segregowane"},
+      {"date": "2025-02-18", "name": "odpady segregowane"}
+    ],
+    "kocmyrzow": [
+      {"date": "2025-01-10", "name": "odpady zmieszane"},
+      {"date": "2025-01-10", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-24", "name": "odpady zmieszane"},
+      {"date": "2025-02-07", "name": "odpady zmieszane"},
+      {"date": "2025-02-07", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-21", "name": "odpady zmieszane"},
+      {"date": "2025-01-20", "name": "odpady segregowane"},
+      {"date": "2025-02-17", "name": "odpady segregowane"}
+    ],
+    "wiktorowice": [
+      {"date": "2025-01-10", "name": "odpady zmieszane"},
+      {"date": "2025-01-10", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-24", "name": "odpady zmieszane"},
+      {"date": "2025-01-24", "name": "odpady segregowane"},
+      {"date": "2025-01-27", "name": "odpady segregowane"},
+      {"date": "2025-02-07", "name": "odpady zmieszane"},
+      {"date": "2025-02-07", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-21", "name": "odpady zmieszane"},
+      {"date": "2025-02-24", "name": "odpady segregowane"}
+    ],
+    "wysiolek_luborzycki": [
+      {"date": "2025-01-03", "name": "odpady segregowane"},
+      {"date": "2025-01-03", "name": "odpady zmieszane"},
+      {"date": "2025-02-07", "name": "odpady segregowane"},
+      {"date": "2025-01-07", "name": "odpady zmieszane"},
+      {"date": "2025-01-07", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-21", "name": "odpady zmieszane"},
+      {"date": "2025-02-04", "name": "odpady zmieszane"},
+      {"date": "2025-02-04", "name": "odpady biodegradowalne"},
+      {"date": "2025-02-18", "name": "odpady zmieszane"}
+    ],
+    "zastow": [
+      {"date": "2025-01-22", "name": "odpady segregowane"},
+      {"date": "2025-02-26", "name": "odpady segregowane"},
+      {"date": "2025-02-26", "name": "odpady zmieszane"},
+      {"date": "2025-01-04", "name": "odpady zmieszane"},
+      {"date": "2025-01-04", "name": "odpady biodegradowalne"},
+      {"date": "2025-01-15", "name": "odpady zmieszane"},
+      {"date": "2025-01-29", "name": "odpady zmieszane"},
+      {"date": "2025-02-12", "name": "odpady zmieszane"},
+      {"date": "2025-02-12", "name": "odpady biodegradowalne"}
+    ]
+  };
